@@ -1,0 +1,12 @@
+Hello,
+
+This is simple script to print content of utmp file.
+
+How to use script:
+
+1. Script was created only for Linux systems.
+2. You need to have Python 3.6 or higher for script work properly. It's because of f-String format, you can always change it.
+3. To run script type "python3 name_of_your_file.py". 
+4. Optional: you can provide a specific username after you run the script, so it will print records only relevant to this user.
+
+Enjoy :)
