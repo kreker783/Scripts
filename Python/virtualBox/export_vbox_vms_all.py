@@ -2,8 +2,8 @@ import subprocess
 import os
 import argparse
 
-
 output_directory = '/home/kreker/personal/vm_backup'
+
 
 get_vms = subprocess.run(['VBoxManage', 'list', 'vms'], capture_output=True, text=True)
 output = get_vms.stdout
