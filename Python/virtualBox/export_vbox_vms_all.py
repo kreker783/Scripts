@@ -16,13 +16,30 @@ def get_vms():
     vms_list = [line.split(' ')[0].strip('"') for line in output.splitlines()]
     return vms_list
 
+def shut_down_vm(vm_name):
+    to_shut = input(f"VM {vm_name} is running. Do you want to shut it down? (y/n)  ")
+    if to_shut == 'y':
+        subprocess.run(['VBoxManage', 'controlvm', vm_name, 'poweroff'])
+    else:
+        print(f"VM {vm_name} will not be shut down.")
+        print(f"Cannot export running VM.")
+        exit()
+    return None
+
 def check_vm_state(vm_name):
     vm_state = subprocess.run(['VBoxManage', 'showvminfo', vm_name], capture_output=True, text=True)
-    print(vm_state.stdout)
     if "running" in vm_state.stdout:
-        print(f"VM {vm_name} is running. Please shut it down before exporting.")
-        return False
-    return True
+        shut_down_vm(vm_name)
+    return False
+
+def export_vm(vm_name):
+    if vm_name is None:
+        print("VM name cannot be None.")
+        return None
+    subprocess.run(['VBoxManage', 'export', vm_name, f'{output_directory}{vm_name}.ova'])
+    print(f"VM {vm_name} exported successfully.")
+    return None
+
 
 def main():
     check_output_directory()
