@@ -5,6 +5,13 @@ currentUser = os.environ['USER']
 
 output_directory = f'/home/{currentUser}/Documents/vmBackup\n'
 
+
+def check_VBoxManage():
+    if subprocess.run(['VBoxManage', '-v'], capture_output=True, text=True).returncode != 0:
+        print("VBoxManage is not installed.")
+        exit()
+    return None
+
 def check_output_directory():
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
@@ -42,6 +49,7 @@ def export_vm(vm_name):
 
 
 def main():
+    check_VBoxManage()
     check_output_directory()
 
     list_of_vms = get_vms()
