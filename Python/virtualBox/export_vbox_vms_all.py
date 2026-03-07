@@ -39,11 +39,11 @@ def check_vm_state(vm_name):
         shut_down_vm(vm_name)
     return False
 
-def export_vm(vm_name):
+def export_vm(vm_name, output_directory=output_directory):
     if vm_name is None:
         print("VM name cannot be None.")
         return None
-    subprocess.run(['VBoxManage', 'export', vm_name, f'{output_directory}{vm_name}.ova'])
+    subprocess.run(['VBoxManage', 'export', vm_name, '--output', f'{output_directory}/{vm_name}.ova'])
     print(f"VM {vm_name} exported successfully.")
     return None
 
@@ -53,9 +53,14 @@ def main():
     check_output_directory()
 
     list_of_vms = get_vms()
+
     for vm_name in list_of_vms:
         print(f"VM to export: {vm_name}")
+
         check_vm_state(vm_name)
+        export_vm(vm_name)
+
+        print("----------------------------------------")
 
 
 if __name__ == "__main__":
