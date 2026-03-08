@@ -3,16 +3,19 @@ import os
 
 currentUser = os.environ['USER']
 
+# Default directory used to store exported VM files.
 output_directory = f'/home/{currentUser}/Documents/vmBackup'
 
 
 def check_VBoxManage():
+    # Ensure VirtualBox command-line tools are available before continuing.
     if subprocess.run(['VBoxManage', '-v'], capture_output=True, text=True).returncode != 0:
         print("VBoxManage is not installed.")
         exit()
     return None
 
 def check_output_directory():
+    # Create the output directory if it does not exist.
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
     print(f"Output directory: {output_directory}")
@@ -24,6 +27,7 @@ def get_vms():
     return vms_list
 
 def shut_down_vm(vm_name):
+    # Running VMs must be stopped before export.
     to_shut = input(f"VM {vm_name} is running. Do you want to shut it down? (y/n)  ")
     if to_shut == 'y':
         subprocess.run(['VBoxManage', 'controlvm', vm_name, 'poweroff'])
@@ -34,12 +38,14 @@ def shut_down_vm(vm_name):
     return None
 
 def check_vm_state(vm_name):
+    # Check whether the VM is running before exporting it.
     vm_state = subprocess.run(['VBoxManage', 'showvminfo', vm_name], capture_output=True, text=True)
     if "running" in vm_state.stdout:
         shut_down_vm(vm_name)
     return False
 
 def export_vm(vm_name, output_directory=output_directory):
+    # Export one VM to an .ova file in the output directory.
     if vm_name is None:
         print("VM name cannot be None.")
         return None
@@ -52,6 +58,7 @@ def main():
     check_VBoxManage()
     check_output_directory()
 
+    # Export every registered VM one by one.
     list_of_vms = get_vms()
 
     for vm_name in list_of_vms:
