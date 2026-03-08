@@ -3,6 +3,7 @@ import subprocess
 import sys
 
 currentUser = os.environ['USER']
+# Default directory used to read VM export files.
 import_directory = f'/home/{currentUser}/Documents/vmBackup'
 
 def check_arguments():
@@ -13,12 +14,14 @@ def check_arguments():
         return sys.argv[1:]
 
 def check_VBoxManage():
+    # Ensure VirtualBox command-line tools are available before continuing.
     if subprocess.run(['VBoxManage', '-v'], capture_output=True, text=True).returncode != 0:
         print("VBoxManage is not installed.")
         exit()
     return None
 
 def check_import_directory():
+    # Verify that the source directory exists.
     if not os.path.exists(import_directory):
         print("Import directory does not exist.")
         exit()
@@ -29,6 +32,7 @@ def get_vms():
     return files
 
 def import_vm(vm_name, import_directory=import_directory):
+    # Import a VM from the selected file.
     subprocess.run(['VBoxManage', 'import', f'{import_directory}/{vm_name}'])
 
 
@@ -36,6 +40,7 @@ def main():
     check_VBoxManage()
     check_import_directory()
 
+    # If no arguments are passed, import every file from the default directory.
     provided_vms_to_import = check_arguments()
 
     if provided_vms_to_import is None:
