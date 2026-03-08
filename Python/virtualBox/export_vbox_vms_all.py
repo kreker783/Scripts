@@ -3,7 +3,7 @@ import os
 
 currentUser = os.environ['USER']
 
-output_directory = f'/home/{currentUser}/Documents/vmBackup\n'
+output_directory = f'/home/{currentUser}/Documents/vmBackup'
 
 
 def check_VBoxManage():
